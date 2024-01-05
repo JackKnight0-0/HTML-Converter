@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+  web:
+    build: .
+    volumes:
+      - .:/HTMLConverter
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - '8000:8000'
+    environment:
+      - 'SECRET_KEY=YOUR_SECRET_KEY'
+      - 'DATABASE_URL=YOUR_DATABASE_URL'
+      - 'DEBUG=False'
+      - 'CSRF_COOKIE_SECURE=True'
+      - 'SECURE_HSTS_SECONDS=True'
+      - 'SECURE_HSTS_PRELOAD=True'
+      - 'SECURE_SSL_REDIRECT=True'
+      - 'SESSION_COOKIE_SECURE=True'
+      - 'SECURE_HSTS_INCLUDE_SUBDOMAINS=True'
+    depends_on:
+      - db
+  db:
+    image: 'postgres:16'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - 'POSTGRES_HOST_AUTH_METHOD=trust'
+volumes:
+  postgres_data:
